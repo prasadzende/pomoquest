@@ -1,0 +1,75 @@
+{
+  "name": "pomoquest",
+  "productName": "PomoQuest",
+  "version": "1.0.0",
+  "description": "A cute, game-style Pomodoro timer that stays on top while running and logs sessions to your Obsidian vault.",
+  "main": "src/main.js",
+  "author": "Prasad Zende",
+  "license": "MIT",
+  "scripts": {
+    "start": "electron .",
+    "test": "node test/run-tests.js",
+    "dist": "electron-builder",
+    "dist:win": "electron-builder --win",
+    "dist:mac": "electron-builder --mac",
+    "dist:linux": "electron-builder --linux"
+  },
+  "dependencies": {
+    "@fontsource/press-start-2p": "^5.0.0",
+    "@fontsource/nunito": "^5.0.0"
+  },
+  "devDependencies": {
+    "electron": "^33.2.0",
+    "electron-builder": "^25.1.8"
+  },
+  "build": {
+    "appId": "com.pomoquest.app",
+    "productName": "PomoQuest",
+    "directories": {
+      "output": "dist",
+      "buildResources": "build"
+    },
+    "files": [
+      "src/**/*",
+      "package.json"
+    ],
+    "win": {
+      "target": [
+        "nsis",
+        "portable"
+      ],
+      "icon": "build/icon.png"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "artifactName": "PomoQuest-Setup-${version}.${ext}"
+    },
+    "portable": {
+      "artifactName": "PomoQuest-Portable-${version}.${ext}"
+    },
+    "mac": {
+      "target": [
+        {
+          "target": "dmg",
+          "arch": [
+            "x64",
+            "arm64"
+          ]
+        }
+      ],
+      "category": "public.app-category.productivity",
+      "icon": "build/icon.png"
+    },
+    "linux": {
+      "target": [
+        "AppImage",
+        "deb"
+      ],
+      "category": "Utility",
+      "icon": "build/icon.png",
+      "maintainer": "Prasad Zende"
+    }
+  },
+  "homepage": "https://github.com/prasadzende/pomoquest"
+}

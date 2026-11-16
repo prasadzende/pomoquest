@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="Content-Security-Policy"
+        content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data:;" />
+  <title>PomoQuest</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body class="theme-day">
+  <div class="sky" aria-hidden="true">
+    <div class="sun"></div>
+    <div class="cloud c1"></div><div class="cloud c2"></div>
+    <div class="stars"></div>
+  </div>
+
+  <header class="hud panel">
+    <canvas id="hudHero" class="pixel hud-avatar" width="16" height="16"></canvas>
+    <div class="hud-main">
+      <div class="hud-row">
+        <span class="pixel-text lvl" id="lvl">LV 1</span>
+        <span class="hud-small"><i class="coin"></i><b id="coins">0</b> &nbsp;🔥<b id="streak">0</b></span>
+      </div>
+      <div class="xpbar" title="XP"><div class="xpfill" id="xpFill"></div></div>
+    </div>
+    <button class="icon-btn" id="btnSettings" title="Settings">⚙</button>
+  </header>
+
+  <!-- TIMER: one box, one button -->
+  <main id="timerView">
+    <div class="stage">
+      <div class="bubble" id="bubble">Ready for a quest?</div>
+      <canvas id="hero" class="pixel hero bob" width="16" height="16"></canvas>
+      <div class="ground"></div>
+    </div>
+
+    <input id="timeBox" class="time-box" value="25:00" spellcheck="false" autocomplete="off"
+           title="Type minutes (25), mm:ss (25:00), h:mm:ss or 1h 30m" />
+    <textarea id="activity" class="activity" rows="2" maxlength="2000"
+              placeholder="What are you working on? (optional)&#10;Extra lines become notes under the entry"></textarea>
+    <div class="tag-chips" id="tagChips" aria-label="Tags"></div>
+    <button class="btn big primary" id="btnStart">▶ START</button>
+  </main>
+
+  <!-- SETTINGS (compact) -->
+  <div class="sheet hidden" id="settingsSheet">
+    <div class="sheet-card panel">
+      <div class="sheet-head">
+        <span class="pixel-text">⚙ SETTINGS</span>
+        <button class="icon-btn" id="btnCloseSettings" title="Close">✕</button>
+      </div>
+
+      <form id="settingsForm" autocomplete="off">
+        <label class="lbl">Obsidian vault</label>
+        <div class="row">
+          <input name="vaultPath" class="text-in" placeholder="Choose your vault folder" />
+          <button type="button" class="btn small" id="btnPickVault">Browse</button>
+        </div>
+        <div class="hint" id="vaultHint"></div>
+
+        <div class="grid2">
+          <div>
+            <label class="lbl">Folder</label>
+            <input name="notesFolder" class="text-in" placeholder="Vault root" />
+          </div>
+          <div>
+            <label class="lbl">Note name</label>
+            <select name="notePreset" class="text-in" id="notePreset"></select>
+          </div>
+        </div>
+        <div id="customRow" class="hidden">
+          <label class="lbl">Custom note name <span class="muted">(e.g. YYYY-MM-DD, [Focus] YYYY-MM)</span></label>
+          <input name="noteFormat" class="text-in" placeholder="YYYY-MM-DD" />
+        </div>
+
+        <div class="grid2">
+          <div>
+            <label class="lbl">Heading in the note</label>
+            <input name="logHeading" class="text-in" placeholder="## 🍅 Pomodoro Log" />
+          </div>
+          <div>
+            <label class="lbl">Tags <span class="muted">(comma separated)</span></label>
+            <input name="tags" class="text-in" placeholder="deepwork, meeting" />
+          </div>
+        </div>
+
+        <div class="hint path" id="pathPreview"></div>
+
+        <div class="row toggles">
+          <label class="check"><input type="checkbox" name="soundOn" /> Sound</label>
+          <label class="check"><input type="checkbox" id="nightToggle" /> Night mode</label>
+          <button type="button" class="btn small" id="btnOpenNote">Open note</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Time's up -->
+  <div class="modal hidden" id="doneModal">
+    <div class="modal-card panel">
+      <div class="pixel-text title">TIME'S UP!</div>
+      <canvas id="doneHero" class="pixel hero-sm jump" width="16" height="16"></canvas>
+      <div class="rewards" id="doneRewards"></div>
+      <div class="muted" id="doneNote"></div>
+      <button class="btn primary" id="btnDoneOk">OK</button>
+    </div>
+  </div>
+
+  <div class="confetti" id="confetti"></div>
+  <div class="toasts" id="toasts"></div>
+
+  <script src="timeparse.js"></script>
+  <script src="sprite.js"></script>
+  <script src="sfx.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,48 @@
+name: Build PomoQuest
+on:
+  push:
+    branches: [main]
+jobs:
+  build:
+    strategy:
+      matrix:
+        os: [windows-latest, macos-latest, ubuntu-latest]
+    runs-on: ${{ matrix.os }}
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - run: npm ci
+      - run: npm test
+      - run: npx electron-builder --publish never
+        env:
+          CSC_IDENTITY_AUTO_DISCOVERY: false
+      - uses: actions/upload-artifact@v4
+        with:
+          name: PomoQuest-${{ matrix.os }}
+          path: dist/
+          if-no-files-found: error
+  release:
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          path: dist
+          merge-multiple: true
+      - name: Publish GitHub Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          VERSION="$(node -p "require('./package.json').version")"
+          TAG="v${VERSION}-build.${GITHUB_RUN_ID}.${GITHUB_RUN_ATTEMPT}"
+          gh release create "$TAG" dist/* \
+            --target "$GITHUB_SHA" \
+            --title "PomoQuest ${TAG}" \
+            --notes "Automated installers for commit ${GITHUB_SHA}."
